@@ -1,14 +1,33 @@
+import csv, os
+from tkinter import filedialog
+
 import mido
-from mido import Message, MidiFile, MidiTrack, MetaMessage
+from mido import MidiFile, MidiTrack, MetaMessage
 
-mid = MidiFile()
-track = MidiTrack()
-mid.tracks.append(track)
+source = filedialog.askopenfilename(
+    filetypes = [
+        ('Marker List', '*.txt')])
 
-track.append(MetaMessage('set_tempo', tempo=mido.bpm2tempo(60)))
-track.append(MetaMessage('marker', text='test', time=0))
-track.append(MetaMessage('marker', text='test', time=12))
-track.append(MetaMessage('marker', text='test', time=24))
-track.append(MetaMessage('marker', text='test', time=36))
+with open(source, encoding='utf-8') as csvfile:
+    mid = MidiFile()
+    track = MidiTrack()
+    mid.tracks.append(track)
 
-mid.save('myfile.mid')
+    tempo = mido.bpm2tempo(60)
+    resolution = 480
+
+    track.append(MetaMessage('set_tempo', tempo))
+
+    csvr = csv.reader(csvfile, delimiter='\t')
+
+    previous_marker = 0
+    time_def = 0
+
+    for row in csvr:
+        time_def = mido.second2tick(float(row[0]), resolution, tempo) - previous_marker
+        track.append(MetaMessage('marker', text=row[2], time=time_def))
+        previous_marker = mido.second2tick(float(row[0]), resolution, tempo)
+
+mid.save(
+    filedialog.asksaveasfilename(
+        filetypes = [('Standard MIDI File', '*.mid')]))
