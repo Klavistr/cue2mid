@@ -18,15 +18,19 @@ with open(source, encoding='utf-8') as csvfile:
 
     track.append(MetaMessage('set_tempo', tempo))
 
+    # 2024.6.26 現在、Audacity のみに対応
+    # iZotope RX は先頭 2 行で時分秒表記かタイムコード表記かを区別するうえ
+    # マーカー名 → 開始位置 → 終了位置に並ぶのでそれをなんかイイカンジにする
     csvr = csv.reader(csvfile, delimiter='\t')
 
-    previous_marker = 0
+    prev_marker = 0
     time_def = 0
 
+    # RX 対応のため row[n] を入れ替えられるようにしたい
     for row in csvr:
-        time_def = mido.second2tick(float(row[0]), resolution, tempo) - previous_marker
+        time_def = mido.second2tick(float(row[0]), resolution, tempo) - prev_marker
         track.append(MetaMessage('marker', text=row[2], time=time_def))
-        previous_marker = mido.second2tick(float(row[0]), resolution, tempo)
+        prev_marker = mido.second2tick(float(row[0]), resolution, tempo)
 
 mid.save(
     filedialog.asksaveasfilename(
