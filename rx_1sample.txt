@@ -1,0 +1,4 @@
+Marker file version: 1
+Time format: Samples
+Marker 1	22007		a
+Marker 2	52920	97019	a

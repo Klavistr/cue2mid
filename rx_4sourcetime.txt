@@ -1,0 +1,4 @@
+Marker file version: 1
+Time format: Source Time
+Marker 1	00:00:00.49902494		a
+Marker 2	00:00:01.20000000	00:00:02.19997732	a
