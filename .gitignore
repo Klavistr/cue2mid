@@ -1,2 +1,3 @@
-myfile.mid
-source.txt
+*.mid
+*.txt
+*.tsv
