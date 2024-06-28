@@ -26,7 +26,7 @@ track.append(MetaMessage('set_tempo', tempo))
 
 # RX 検出用の辞書を用意しておく
 rx_detection = {
-    'Time format: Samples': ('RX Sample', 2),
+    'Time format: Samples': ('RX Samples', 2),
     'Time format: Time': ('RX Time', 2),
     'Time format: Timecode': ('RX Timecode', 3),
     'Time format: Source Time': ('RX Time', 2),
@@ -54,7 +54,7 @@ with open(source, encoding='utf-8') as csvfile:
         # 辞書の value[1] を開始行としてそれぞれ取り込む
         start_line = my_detection[1]
 
-        if div_mode == 'RX Sample':
+        if div_mode == 'RX Samples':
             # サンプルレートの情報は埋め込まれていないので
             # 44100 とか 192000 とか手打ちする必要がある
             smpl_rate = int(input('Sample rate in Hz? '))
@@ -79,7 +79,7 @@ with open(source, encoding='utf-8') as csvfile:
             print('* Skipped: row', i)
         else:
             # 分割モードによってパラメーターを用意する
-            if div_mode == 'RX Sample':
+            if div_mode == 'RX Samples':
                 sec = int(row[1]) / smpl_rate
                 now = mido.second2tick(float(sec), resolution, tempo)
                 text = row[0]
